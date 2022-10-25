@@ -33,11 +33,48 @@ public:
 
   rclcpp_action::CancelResponse handle_cancel(std::shared_ptr<rclcpp_action::ServerGoalHandle<Progress>> goal_handle)
   {
+    (void)goal_handle;
     RCLCPP_INFO(this->get_logger(),"接收到任务取消请求;");
     return rclcpp_action::CancelResponse::ACCEPT;
   }
   void handle_accepted(std::shared_ptr<rclcpp_action::ServerGoalHandle<Progress>> goal_handle)
   {
+    (void)goal_handle;
+    std::thread(std::bind(&ActionServer::execute,this,goal_handle)).detach();
+  }
+  void execute(std::shared_ptr<rclcpp_action::ServerGoalHandle<Progress>> goal_handle){
+    // 1. 生成连续反馈返回给客户端；
+    // 首先要获取目标值；
+    int num = goal_handle->get_goal()->num;
+    int sum = 0;
+    auto feedback = std::make_shared<Progress::Feedback>();
+    auto result = std::make_shared<Progress::Result>();
+    // 设置休眠
+    rclcpp::Rate rate(1.0);
+    for(int i=1;i<=num;i++){
+      sum += i;
+      double progress = i/(double)num;
+      feedback->progress = progress;
+      goal_handle->publish_feedback(feedback);
+      RCLCPP_INFO(this->get_logger(),"连续反馈中，进度:%.2f",progress);
+      // 判断是否接受到取消请求
+      if(goal_handle->is_canceling()){
+        // 如果接受到取消请求,终止程序
+        result->sum = sum;
+        goal_handle->canceled(result); 
+        RCLCPP_INFO(this->get_logger(),"任务被取消了");
+        return;
+      }
+
+      rate.sleep();
+    }
+    // 2. 生成最终响应结果;
+
+    if(rclcpp::ok()){
+      result->sum = sum;
+      goal_handle->succeed(result);
+      RCLCPP_INFO(this->get_logger(),"最终结果:%d",sum);
+    }
   }
 };
 
