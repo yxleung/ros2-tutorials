@@ -62,7 +62,7 @@ public:
         // 如果接受到取消请求,终止程序
         result->sum = sum;
         goal_handle->canceled(result); 
-        RCLCPP_INFO(this->get_logger(),"任务被取消了");
+        RCLCPP_INFO(this->get_logger(),"任务被取消了"); 
         return;
       }
 
