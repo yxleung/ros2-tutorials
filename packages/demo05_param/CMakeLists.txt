@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(service_demo_01)
+project(demo05_param)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -8,27 +8,25 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(interface_demo_01 REQUIRED)
 
-add_executable(server_01 src/server_01.cpp)
-add_executable(client_01 src/client_01.cpp)
-
-target_include_directories(server_01 PUBLIC
+add_executable(param_server src/param_server.cpp)
+add_executable(param_client src/param_client.cpp)
+target_include_directories(param_server PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-target_compile_features(server_01 PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(param_server PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 ament_target_dependencies(
-  server_01
+  param_server
   "rclcpp"
-  "interface_demo_01"
 )
 ament_target_dependencies(
-  client_01
+  param_client
   "rclcpp"
-  "interface_demo_01"
 )
 
-install(TARGETS server_01 client_01
+install(TARGETS 
+  param_server
+  param_client
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

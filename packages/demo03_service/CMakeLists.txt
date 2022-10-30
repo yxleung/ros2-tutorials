@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(topic_demo_01)
+project(demo03_service)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -8,42 +8,29 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(interface_demo_01 REQUIRED)
+find_package(demo01_interface REQUIRED)
 
-add_executable(talker_str src/talker_str.cpp)
-add_executable(listener_str src/listener_str.cpp)
-add_executable(talker_stu src/talker_stu.cpp)
-add_executable(listener_stu src/listener_stu.cpp)
+add_executable(server src/server.cpp)
+add_executable(client src/client.cpp)
 
-target_include_directories(talker_str PUBLIC
+target_include_directories(server PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-target_compile_features(talker_str PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
-
+target_compile_features(server PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 ament_target_dependencies(
-  talker_str
+  server
   "rclcpp"
-  "std_msgs"
+  "demo01_interface"
 )
 ament_target_dependencies(
-  listener_str
+  client
   "rclcpp"
-  "std_msgs"
-)
-ament_target_dependencies(
-  talker_stu
-  "rclcpp"
-  "std_msgs"
-  "interface_demo_01"
-)
-ament_target_dependencies(
-  listener_stu
-  "rclcpp"
-  "std_msgs"
-  "interface_demo_01"
+  "demo01_interface"
 )
 
-install(TARGETS talker_str listener_str talker_stu listener_stu
+install(TARGETS 
+  server
+  client
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

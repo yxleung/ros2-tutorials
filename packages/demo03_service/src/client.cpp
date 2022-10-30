@@ -1,7 +1,7 @@
 #include "rclcpp/rclcpp.hpp"
-#include "interface_demo_01/srv/add_ints.hpp"
+#include "demo01_interface/srv/add_ints.hpp"
 
-using interface_demo_01::srv::AddInts;
+using demo01_interface::srv::AddInts;
 using namespace std::chrono_literals;
 
 class Client : public rclcpp::Node
@@ -10,7 +10,7 @@ private:
     rclcpp::Client<AddInts>::SharedPtr client_;
 
 public:
-    Client() : Node("client_01_node")
+    Client() : Node("client_node")
     {
         RCLCPP_INFO(this->get_logger(), "客户端创建!");
         client_ = this->create_client<AddInts>("add_int");

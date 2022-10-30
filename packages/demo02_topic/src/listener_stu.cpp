@@ -1,7 +1,7 @@
 #include "rclcpp/rclcpp.hpp"
-#include "interface_demo_01/msg/student.hpp"
+#include "demo01_interface/msg/student.hpp"
 
-using interface_demo_01::msg::Student;
+using demo01_interface::msg::Student;
 
 class Listener:public rclcpp::Node{
     private:

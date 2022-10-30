@@ -1,7 +1,7 @@
 #include "rclcpp/rclcpp.hpp"
-#include "interface_demo_01/srv/add_ints.hpp"
+#include "demo01_interface/srv/add_ints.hpp"
 
-using interface_demo_01::srv::AddInts;
+using demo01_interface::srv::AddInts;
 
 class Server : public rclcpp::Node
 {
@@ -14,7 +14,7 @@ private:
     }
 
 public:
-    Server() : Node("server_01_node")
+    Server() : Node("server_node")
     {
         RCLCPP_INFO(this->get_logger(), "服务创建!");
         service_ = this->create_service<AddInts>("add_int", std::bind(&Server::add, this, std::placeholders::_1, std::placeholders::_2));

@@ -1,8 +1,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-#include "interface_demo_01/action/progress.hpp"
+#include "demo01_interface/action/progress.hpp"
 
-using interface_demo_01::action::Progress;
+using demo01_interface::action::Progress;
 using std::placeholders::_1;
 using std::placeholders::_2;
 using namespace std::chrono_literals;
