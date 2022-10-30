@@ -1,0 +1,6 @@
+launch:
+  - node:
+      pkg: "turtlesim"
+      exec: "turtlesim_node"
+      namespace: "lyx"
+      name: "t1"
